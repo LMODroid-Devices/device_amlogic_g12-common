@@ -13,6 +13,7 @@ vendor/lib/libamlparser.so
 vendor/lib/libamlresampler.so
 vendor/lib/libamlspeed.so
 vendor/lib/libamltinyalsa.so
+vendor/lib/libdroidaudiospdif.so
 vendor/lib/libdvbaudioutils.so
 vendor/lib/libfaad.so
 vendor/lib/libmad.so
@@ -44,10 +45,6 @@ vendor/lib/hw/android.hardware.bluetooth@1.0-impl-droidlogic.so
 # Camera
 vendor/lib/hw/camera.amlogic.so
 vendor/lib/libispaaa.so
-
-# Cgroups
-vendor/etc/cgroups.json
-vendor/etc/task_profiles.json
 
 # Common
 vendor/bin/ddrtest.sh
@@ -112,28 +109,6 @@ vendor/etc/init/irblaster1.rc
 vendor/etc/init/power.rc
 vendor/etc/init/sysfs_permissions.rc
 
-# Keylayouts
-odm/usr/idc/Vendor_000d_Product_3838.idc
-odm/usr/idc/Vendor_000d_Product_3839.idc
-odm/usr/idc/Vendor_7545_Product_0021.idc
-odm/usr/keylayout/Vendor_000d_Product_3838.kl
-odm/usr/keylayout/Vendor_000d_Product_3839.kl
-odm/usr/keylayout/Vendor_7545_Product_0021.kl
-vendor/usr/keylayout/Vendor_0002_Product_0002.kl
-vendor/usr/keylayout/Vendor_000d_Product_3838.kl
-vendor/usr/keylayout/Vendor_000d_Product_3839.kl
-vendor/usr/keylayout/Vendor_005d_Product_0001.kl
-vendor/usr/keylayout/Vendor_005d_Product_0002.kl
-vendor/usr/keylayout/Vendor_0484_Product_5738.kl
-vendor/usr/keylayout/Vendor_0508_Product_0110.kl
-vendor/usr/keylayout/Vendor_0957_Product_0006.kl
-vendor/usr/keylayout/Vendor_0c45_Product_1109.kl
-vendor/usr/keylayout/Vendor_1915_Product_0001.kl
-vendor/usr/keylayout/Vendor_7045_Product_1820.kl
-vendor/usr/keylayout/Vendor_7545_Product_0021.kl
-vendor/usr/keylayout/Vendor_7545_Product_0180.kl
-vendor/usr/keylayout/Vendor_7545_Product_0190.kl
-
 # Media (Hardware)
 vendor/bin/DecInfo_test
 vendor/bin/esplayer
@@ -162,6 +137,7 @@ vendor/lib/libOmxVideo.so
 vendor/lib/libdatachunkqueue_alt.so
 vendor/lib/libdsm.so
 vendor/lib/libfpscalculator_alt.so
+vendor/lib/libge2d.so
 vendor/lib/libomx_av_core_alt.so
 vendor/lib/libomx_clock_utils_alt.so
 vendor/lib/libomx_framework_alt.so
@@ -192,10 +168,6 @@ vendor/lib/hw/screen_source.amlogic.so
 vendor/etc/seccomp_policy/mediacodec.policy
 vendor/etc/seccomp_policy/mediaextractor.policy
 vendor/etc/seccomp_policy/mediaswcodec.policy
-
-# System
-vendor/lib/libdroidaudiospdif.so
-vendor/lib/libge2d.so
 
 # systemcontrol
 odm/etc/firmware/firmware.le

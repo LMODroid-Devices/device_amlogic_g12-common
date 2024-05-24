@@ -6,9 +6,6 @@
 
 COMMON_PATH := device/amlogic/g12-common
 
-## BUILD_BROKEN_*
-BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
-
 # GPU
 TARGET_AMLOGIC_GPU_ARCH ?= bifrost
 
@@ -17,12 +14,13 @@ DEVICE_MANIFEST_FILE += $(COMMON_PATH)/manifest.xml
 
 ## Kernel
 BOARD_KERNEL_CMDLINE := androidboot.dynamic_partitions=true androidboot.boot_devices=ffe07000.emmc use_uvm=1
-ifeq ($(WITH_CONSOLE),true)
-BOARD_KERNEL_CMDLINE += console=ttyS0,115200 no_console_suspend
-endif
 TARGET_KERNEL_CONFIG := g12a_defconfig
 TARGET_KERNEL_SOURCE := kernel/amlogic/linux-4.9
 TARGET_KERNEL_VARIANT_CONFIG ?= g12a_variant_defconfig
+
+ifeq ($(WITH_CONSOLE),true)
+BOARD_KERNEL_CMDLINE += console=ttyS0,115200 no_console_suspend
+endif
 
 ## Partitions
 SSI_PARTITIONS := product system system_ext
@@ -35,16 +33,7 @@ BOARD_BUILD_SUPER_IMAGE_BY_DEFAULT := true
 BOARD_SUPER_PARTITION_GROUPS := amlogic_dynamic_partitions
 BUILDING_SUPER_EMPTY_IMAGE := true
 
-ifneq ($(WITH_GMS),true)
-BOARD_PRODUCTIMAGE_EXTFS_INODE_COUNT := -1
-BOARD_PRODUCTIMAGE_PARTITION_RESERVED_SIZE := 417000000
-BOARD_SYSTEMIMAGE_EXTFS_INODE_COUNT := -1
-BOARD_SYSTEMIMAGE_PARTITION_RESERVED_SIZE := 40000000
-BOARD_SYSTEM_EXTIMAGE_PARTITION_RESERVED_SIZE := 20000000
-endif
-
 ## Properties
-TARGET_PRODUCT_PROP += $(COMMON_PATH)/product.prop
 TARGET_SYSTEM_PROP += $(COMMON_PATH)/system.prop
 TARGET_VENDOR_PROP += $(COMMON_PATH)/vendor.prop
 

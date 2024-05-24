@@ -6,9 +6,6 @@
 
 COMMON_PATH := device/amlogic/g12-common
 
-## BUILD_BROKEN_*
-BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
-
 # GPU
 TARGET_AMLOGIC_GPU_ARCH := bifrost
 
@@ -20,6 +17,10 @@ BOARD_KERNEL_CMDLINE := androidboot.dynamic_partitions=true androidboot.boot_dev
 TARGET_KERNEL_CONFIG := g12a_defconfig
 TARGET_KERNEL_SOURCE := kernel/amlogic/linux-4.9
 TARGET_KERNEL_VARIANT_CONFIG ?= g12a_variant_defconfig
+
+ifeq ($(WITH_CONSOLE),true)
+BOARD_KERNEL_CMDLINE += console=ttyS0,115200 no_console_suspend
+endif
 
 ## Partitions
 CORE_PARTITIONS := system vendor

@@ -64,9 +64,6 @@ fi
 
 function blob_fixup() {
      case "${1}" in
-        odm/etc/tvconfig/pq/pq_default.ini)
-             sed -i 's/pq.AllPQMoudle.en/pq.AllPQModule.en/g' "${2}"
-             ;;
         vendor/etc/init/fs.rc)
              sed -i '/media 0770 media_rw media_rw/d' "${2}"
              sed -i '/setprop ro.crypto.fuse_sdcard true/d' "${2}"
@@ -86,17 +83,25 @@ if [ -z "${ONLY_FIRMWARE}" ] && [ -z "${ONLY_TARGET}" ]; then
     extract "${MY_DIR}/proprietary-files-tee.txt" "${SRC}" "${KANG}" --section "${SECTION}"
 fi
 
-if [ -z "${ONLY_COMMON}" ] && [ -s "${MY_DIR}/../../${VENDOR}/${DEVICE}/proprietary-files.txt" ]; then
+if [ -z "${ONLY_COMMON}" ] && [ -s "${MY_DIR}/../../${VENDOR_BRAND}/${DEVICE}/proprietary-files.txt" ]; then
     # Reinitialize the helper for device
-    source "${MY_DIR}/../../${VENDOR}/${DEVICE}/extract-files.sh"
+    source "${MY_DIR}/../../${VENDOR_BRAND}/${DEVICE}/extract-files.sh"
     setup_vendor "${DEVICE}" "${VENDOR}" "${ANDROID_ROOT}" false "${CLEAN_VENDOR}"
 
     if [ -z "${ONLY_FIRMWARE}" ]; then
-        extract "${MY_DIR}/../../${VENDOR}/${DEVICE}/proprietary-files.txt" "${SRC}" "${KANG}" --section "${SECTION}"
+        extract "${MY_DIR}/../../${VENDOR_BRAND}/${DEVICE}/proprietary-files.txt" "${SRC}" "${KANG}" --section "${SECTION}"
     fi
 
-    if [ -f "${MY_DIR}/../../${VENDOR}/${DEVICE}/proprietary-firmware.txt" ]; then
-        extract_firmware "${MY_DIR}/../../${VENDOR}/${DEVICE}/proprietary-firmware.txt" "${SRC}"
+    if [ "${TARGET_SOC}" == "g12a" ]
+    then
+      extract "${MY_DIR}/../../${VENDOR_COMMON}/${DEVICE_COMMON}/proprietary-files-g12a.txt" "${SRC}" "${KANG}" --section "${SECTION}"
+    elif [ "${TARGET_SOC}" == "sm1" ]
+    then
+      extract "${MY_DIR}/../../${VENDOR_COMMON}/${DEVICE_COMMON}/proprietary-files-sm1.txt" "${SRC}" "${KANG}" --section "${SECTION}"
+    fi
+
+    if [ -f "${MY_DIR}/../../${VENDOR_BRAND}/${DEVICE}/proprietary-firmware.txt" ]; then
+        extract_firmware "${MY_DIR}/../../${VENDOR_BRAND}/${DEVICE}/proprietary-firmware.txt" "${SRC}"
     fi
 fi
 

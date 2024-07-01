@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2021-2023 The LineageOS Project
+# Copyright (C) 2021-2024 The LineageOS Project
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -19,14 +19,15 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/mixer_paths.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths.xml
 
 PRODUCT_PACKAGES += \
-    android.hardware.audio@5.0-impl \
+    android.hardware.audio@6.0-impl \
     android.hardware.audio@7.0.vendor \
     android.hardware.audio@7.0-util.vendor \
     android.hardware.audio.common@7.0-util \
-    android.hardware.audio.effect@5.0-impl \
+    android.hardware.audio.effect@6.0-impl \
     android.hardware.audio.effect@7.0-util.vendor \
     av-types-aidl-cpp.vendor \
-    libaudiofoundation.vendor
+    libaudiofoundation.vendor \
+    libaudioroute.vendor
 
 ## Bluetooth
 PRODUCT_PACKAGES += \
@@ -41,7 +42,10 @@ PRODUCT_PACKAGES += \
     camera.device@3.2-impl \
     camera.device@3.3-impl \
     camera.device@3.4-impl \
-    camera.device@3.5-impl
+    camera.device@3.5-impl \
+    libexif.vendor \
+    libjpeg.vendor \
+    libyuv.vendor
 
 ## Cgroups
 PRODUCT_COPY_FILES += \
@@ -65,7 +69,10 @@ PRODUCT_PACKAGES += \
 
 ## Graphics
 PRODUCT_PACKAGES += \
-    android.hardware.graphics.composer@2.4.vendor
+    android.hardware.graphics.composer@2.4.vendor \
+    libdmabufheap.vendor \
+    libion.vendor \
+    libutilscallstack.vendor
 
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.opengles.aep.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.opengles.aep.xml \
@@ -131,7 +138,8 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.oem_unlock_supported=1
 
 PRODUCT_PACKAGES += \
-    android.hardware.oemlock@1.0.vendor
+    android.hardware.oemlock@1.0.vendor \
+    libdumpstateutil.vendor
 endif
 
 ## Partitions
@@ -143,22 +151,37 @@ TARGET_AMLOGIC_SOC ?= g12a
 
 ## Power
 PRODUCT_PACKAGES += \
-    android.hardware.power-V2-ndk_platform.vendor
+    android.hardware.power-service.lineage-libperfmgr
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/powerhint.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint.json
 
 ## Shipping API
 PRODUCT_SHIPPING_API_LEVEL := 29
 
 ## Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
-    $(LOCAL_PATH)
+    $(LOCAL_PATH) \
+    hardware/google/interfaces \
+    hardware/google/pixel \
+    hardware/lineage/interfaces/power-libperfmgr
+
+## SystemControl
+PRODUCT_PACKAGES += \
+    libsqlite.vendor
 
 ## Thermal
 PRODUCT_PACKAGES += \
-    android.hardware.thermal@2.0.vendor
+    android.hardware.thermal@2.0.vendor \
+    libjsoncpp.vendor
 
 ## USB
 PRODUCT_PACKAGES += \
     android.hardware.usb.gadget@1.2.vendor
+
+## VNDK
+PRODUCT_PACKAGES += \
+    libui_shim.vendor
 
 ## Widevine DRM
 PRODUCT_PACKAGES += \

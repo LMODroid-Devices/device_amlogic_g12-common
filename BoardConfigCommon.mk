@@ -6,8 +6,8 @@
 
 COMMON_PATH := device/amlogic/g12-common
 
-# GPU
-TARGET_AMLOGIC_GPU_ARCH := bifrost
+## BUILD_BROKEN_*
+BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
 
 ## HIDL
 DEVICE_MANIFEST_FILE += $(COMMON_PATH)/manifest.xml
@@ -22,9 +22,23 @@ ifeq ($(WITH_CONSOLE),true)
 BOARD_KERNEL_CMDLINE += console=ttyS0,115200 no_console_suspend ignore_loglevel
 endif
 
+## Kernel modules
+TARGET_KERNEL_EXT_MODULE_ROOT := kernel/amlogic/kernel-modules
+TARGET_KERNEL_EXT_MODULES += \
+    mali-driver/bifrost \
+    media-4.9
+
+ifneq ($(TARGET_HAS_TEE),false)
+TARGET_KERNEL_EXT_MODULES += \
+    optee
+endif
+
+TARGET_MODULE_ALIASES += \
+    mali_kbase.ko:mali.ko
+
 ## Partitions
 CORE_PARTITIONS := system vendor
-ADDITIONAL_PARTITIONS := odm product system_ext
+ADDITIONAL_PARTITIONS := odm product system_ext vendor_dlkm
 ALL_PARTITIONS := $(CORE_PARTITIONS) $(ADDITIONAL_PARTITIONS)
 
 BOARD_AMLOGIC_DYNAMIC_PARTITIONS_PARTITION_LIST := $(ALL_PARTITIONS)
@@ -52,7 +66,7 @@ TARGET_RECOVERY_FSTAB := $(COMMON_PATH)/init-files/fstab.amlogic
 TARGET_RELEASETOOLS_EXTENSIONS := $(COMMON_PATH)/releasetools
 
 ## Vendor SPL
-VENDOR_SECURITY_PATCH := 2023-02-01
+VENDOR_SECURITY_PATCH := 2024-04-01
 
 ## Include the main common tree BoardConfig makefile
 include device/amlogic/common/BoardConfigAmlogic.mk

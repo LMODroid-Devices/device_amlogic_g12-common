@@ -6,17 +6,17 @@
   {
     "remote": "lineage",
     "repository": "android_hardware_amlogic_kernel-modules_mali-driver",
-    "target_path": "hardware/amlogic/kernel-modules/mali-driver"
+    "target_path": "kernel/amlogic/kernel-modules/mali-driver"
   },
   {
     "remote": "lineage",
     "repository": "android_hardware_amlogic_kernel-modules_media",
-    "target_path": "hardware/amlogic/kernel-modules/media"
+    "target_path": "kernel/amlogic/kernel-modules/media-4.9"
   },
   {
     "remote": "lineage",
     "repository": "android_hardware_amlogic_kernel-modules_optee",
-    "target_path": "hardware/amlogic/kernel-modules/optee"
+    "target_path": "kernel/amlogic/kernel-modules/optee"
   },
   {
     "remote": "lineage",

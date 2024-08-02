@@ -21,7 +21,6 @@ vendor/lib/libnano.so
 vendor/lib/libsonic_ext.so
 
 # Audio Effects
-vendor/etc/audio_effects.conf
 vendor/lib/soundfx/libavl.so
 vendor/lib/soundfx/libbalance.so
 vendor/lib/soundfx/libdbx.so
@@ -92,12 +91,6 @@ vendor/lib/libamgralloc_ext.so
 # HDMI CEC
 vendor/lib/hw/hdmi_cec.amlogic.so
 
-# Health
-vendor/bin/hw/android.hardware.health@2.1-service.droidlogic
-vendor/etc/init/android.hardware.health@2.1-service.droidlogic.rc
-vendor/etc/vintf/manifest/android.hardware.health@2.1-servcie.droidlogic.xml
-vendor/lib/hw/android.hardware.health@2.0-impl-2.1.droidlogic.so
-
 # Kernel Modules
 vendor/lib/modules/amlogic_fbc_lib.ko:vendor_dlkm/lib/modules/amlogic_fbc_lib.ko
 
@@ -119,7 +112,6 @@ odm/usr/idc/Vendor_7545_Product_0021.idc
 odm/usr/keylayout/Vendor_000d_Product_3838.kl
 odm/usr/keylayout/Vendor_000d_Product_3839.kl
 odm/usr/keylayout/Vendor_7545_Product_0021.kl
-vendor/usr/keylayout/Generic.kl
 vendor/usr/keylayout/Vendor_0002_Product_0002.kl
 vendor/usr/keylayout/Vendor_000d_Product_3838.kl
 vendor/usr/keylayout/Vendor_000d_Product_3839.kl

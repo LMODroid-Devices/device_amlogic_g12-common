@@ -14,6 +14,8 @@ if [[ ! -d "${MY_DIR}" ]]; then MY_DIR="${PWD}"; fi
 
 ANDROID_ROOT="${MY_DIR}/../../.."
 
+export TARGET_ENABLE_CHECKELF=true
+
 # If XML files don't have comments before the XML header, use this flag
 # Can still be used with broken XML files by using blob_fixup
 export TARGET_DISABLE_XML_FIXING=true
@@ -74,11 +76,9 @@ function blob_fixup() {
              sed -i '/media 0770 media_rw media_rw/d' "${2}"
              sed -i '/setprop ro.crypto.fuse_sdcard true/d' "${2}"
              ;;
-        vendor/etc/init/tee-supplicant.rc)
-            [ "$2" = "" ] && return 0
-             sed -i 's#/vendor/lib/#/vendor/lib/modules/#g' "${2}"
-             ;;
-        vendor/lib/hw/camera.amlogic.so|vendor/lib/hw/hwcomposer.amlogic.so|vendor/lib/libOmxCore.so)
+        vendor/lib/hw/camera.amlogic.so | vendor/lib/hw/hwcomposer.amlogic.so | \
+            vendor/lib/libOmxBase.so | vendor/lib/libOmxCore.so | vendor/lib/libOmxVideo.so | \
+            vendor/lib/libmeson_display_service.so)
             [ "$2" = "" ] && return 0
             grep -q "libui_shim.so" "${2}" || "${PATCHELF}" --add-needed "libui_shim.so" "${2}"
             ;;
@@ -99,7 +99,6 @@ if [ -z "${ONLY_FIRMWARE}" ] && [ -z "${ONLY_TARGET}" ]; then
     setup_vendor "${DEVICE_COMMON}" "${VENDOR_COMMON:-$VENDOR}" "${ANDROID_ROOT}" true "${CLEAN_VENDOR}"
 
     extract "${MY_DIR}/proprietary-files.txt" "${SRC}" "${KANG}" --section "${SECTION}"
-    extract "${MY_DIR}/proprietary-files-tee.txt" "${SRC}" "${KANG}" --section "${SECTION}"
 fi
 
 if [ -z "${ONLY_COMMON}" ] && [ -s "${MY_DIR}/../../${VENDOR_BRAND}/${DEVICE}/proprietary-files.txt" ]; then
@@ -109,14 +108,6 @@ if [ -z "${ONLY_COMMON}" ] && [ -s "${MY_DIR}/../../${VENDOR_BRAND}/${DEVICE}/pr
 
     if [ -z "${ONLY_FIRMWARE}" ]; then
         extract "${MY_DIR}/../../${VENDOR_BRAND}/${DEVICE}/proprietary-files.txt" "${SRC}" "${KANG}" --section "${SECTION}"
-    fi
-
-    if [ "${TARGET_SOC}" == "g12a" ]
-    then
-      extract "${MY_DIR}/../../${VENDOR_COMMON}/${DEVICE_COMMON}/proprietary-files-g12a.txt" "${SRC}" "${KANG}" --section "${SECTION}"
-    elif [ "${TARGET_SOC}" == "sm1" ]
-    then
-      extract "${MY_DIR}/../../${VENDOR_COMMON}/${DEVICE_COMMON}/proprietary-files-sm1.txt" "${SRC}" "${KANG}" --section "${SECTION}"
     fi
 
     if [ -f "${MY_DIR}/../../${VENDOR_BRAND}/${DEVICE}/proprietary-firmware.txt" ]; then

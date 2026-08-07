@@ -1,10 +1,12 @@
 #
-# Copyright (C) 2021-2023 The LineageOS Project
-#
+# SPDX-FileCopyrightText: The LineageOS Project
 # SPDX-License-Identifier: Apache-2.0
 #
 
 COMMON_PATH := device/amlogic/g12-common
+
+## Architecture
+TARGET_CPU_VARIANT_RUNTIME := cortex-a53
 
 ## BUILD_BROKEN_*
 # Needed for systemcontrol blobs copy-files to recovery via TARGET_RECOVERY_DEVICE_DIRS
@@ -12,6 +14,10 @@ BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
 
 ## HIDL
 DEVICE_MANIFEST_FILE += $(COMMON_PATH)/manifest.xml
+
+ifneq ($(BOARD_HAVE_BLUETOOTH),false)
+DEVICE_MANIFEST_FILE += $(COMMON_PATH)/manifest_bt.xml
+endif
 
 ## Kernel
 BOARD_KERNEL_CMDLINE := androidboot.dynamic_partitions=true use_uvm=1
@@ -52,7 +58,6 @@ BOARD_AMLOGIC_DYNAMIC_PARTITIONS_PARTITION_LIST := $(ALL_PARTITIONS)
 BOARD_AMLOGIC_DYNAMIC_PARTITIONS_SIZE := $(shell echo $$(($(BOARD_SUPER_PARTITION_SIZE) - 4194304))) # (BOARD_SUPER_PARTITION_SIZE - "reasonable overhead of 4 MiB" 4194304)
 BOARD_BUILD_SUPER_IMAGE_BY_DEFAULT := true
 BOARD_SUPER_PARTITION_GROUPS := amlogic_dynamic_partitions
-BUILDING_SUPER_EMPTY_IMAGE := true
 
 ## Properties
 TARGET_SYSTEM_PROP += $(COMMON_PATH)/system.prop

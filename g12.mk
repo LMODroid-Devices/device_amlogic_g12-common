@@ -13,9 +13,9 @@ PRODUCT_COPY_FILES +=  \
 
 ## Audio
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/audio/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml \
-    $(LOCAL_PATH)/audio/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
-    $(LOCAL_PATH)/audio/mixer_paths.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths.xml
+    $(LOCAL_PATH)/configs/audio/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml \
+    $(LOCAL_PATH)/configs/audio/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
+    $(LOCAL_PATH)/configs/audio/mixer_paths.xml:$(TARGET_COPY_OUT_VENDOR)/etc/mixer_paths.xml
 
 PRODUCT_PACKAGES += \
     android.hardware.audio@6.0-impl \
@@ -36,14 +36,19 @@ PRODUCT_PACKAGES += \
 ## Cgroups
 PRODUCT_COPY_FILES += \
     system/core/libprocessgroup/profiles/cgroups_28.json:$(TARGET_COPY_OUT_VENDOR)/etc/cgroups.json \
-    $(LOCAL_PATH)/configs/task_profiles.json:$(TARGET_COPY_OUT_VENDOR)/etc/task_profiles.json
+    system/core/libprocessgroup/profiles/task_profiles_28.json:$(TARGET_COPY_OUT_VENDOR)/etc/task_profiles.json
 
 ## Codecs
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/media/media_codecs.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs.xml \
-    $(LOCAL_PATH)/media/media_codecs_performance.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_performance.xml \
-    $(LOCAL_PATH)/media/media_profiles.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_profiles.xml \
-    $(LOCAL_PATH)/media/media_profiles_V1_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_profiles_V1_0.xml
+    $(LOCAL_PATH)/configs/media/media_codecs.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs.xml \
+    $(LOCAL_PATH)/configs/media/media_codecs_performance.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_performance.xml \
+    $(LOCAL_PATH)/configs/media/media_profiles.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_profiles.xml \
+    $(LOCAL_PATH)/configs/media/media_profiles_V1_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_profiles_V1_0.xml
+
+## Display
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/display/mesondisplay.cfg:$(TARGET_COPY_OUT_RECOVERY)/root/system/etc/mesondisplay.cfg \
+    $(LOCAL_PATH)/configs/display/mesondisplay.cfg:$(TARGET_COPY_OUT_VENDOR)/etc/mesondisplay.cfg
 
 ## Graphics
 PRODUCT_COPY_FILES += \
@@ -56,10 +61,6 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.opengles.deqp.level-2021-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.opengles.deqp.level.xml \
     frameworks/native/data/etc/android.software.vulkan.deqp.level-2021-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.vulkan.deqp.level.xml
 
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/mesondisplay.cfg:$(TARGET_COPY_OUT_RECOVERY)/root/system/etc/mesondisplay.cfg \
-    $(LOCAL_PATH)/configs/mesondisplay.cfg:$(TARGET_COPY_OUT_VENDOR)/etc/mesondisplay.cfg
-
 ## HDMI CEC
 ifeq ($(PRODUCT_IS_ATV),true)
 PRODUCT_PACKAGES += \
@@ -67,42 +68,21 @@ PRODUCT_PACKAGES += \
     android.hardware.tv.cec@1.0-service
 endif
 
-## Init-Files
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/init-files/init.amlogic.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.amlogic.rc \
-    $(LOCAL_PATH)/init-files/init.amlogic.board.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.amlogic.board.rc \
-    $(LOCAL_PATH)/init-files/init.amlogic.media.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.amlogic.media.rc \
-    $(LOCAL_PATH)/init-files/init.amlogic.system.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.amlogic.system.rc \
-    $(LOCAL_PATH)/init-files/init.amlogic.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.amlogic.usb.rc \
-    $(LOCAL_PATH)/init-files/init.amlogic.wifi.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.amlogic.wifi.rc \
-    $(LOCAL_PATH)/init-files/init.recovery.amlogic.rc:recovery/root/init.recovery.amlogic.rc
+## Init
+$(call soong_config_set,amlogic_fstab,bootdevice,$(TARGET_BOOTDEVICE))
+$(call soong_config_set,amlogic_fstab,with_tee,$(TARGET_HAS_TEE))
 
-# Support both AVB/Non-AVB variants of multiple boot mediums (default to eMMC)
-ifneq ($(TARGET_HAS_TEE),false)
-  ifneq ($(strip $(TARGET_BOOTDEVICE)),)
-  PRODUCT_COPY_FILES += \
-      $(LOCAL_PATH)/init-files/fstab.$(TARGET_BOOTDEVICE).amlogic:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.amlogic \
-      $(LOCAL_PATH)/init-files/fstab.$(TARGET_BOOTDEVICE).amlogic:$(TARGET_COPY_OUT_RAMDISK)/first_stage_ramdisk/fstab.amlogic \
-      $(LOCAL_PATH)/init-files/fstab.$(TARGET_BOOTDEVICE).amlogic:$(TARGET_COPY_OUT_RAMDISK)/fstab.amlogic
-  else
-  PRODUCT_COPY_FILES += \
-      $(LOCAL_PATH)/init-files/fstab.amlogic:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.amlogic \
-      $(LOCAL_PATH)/init-files/fstab.amlogic:$(TARGET_COPY_OUT_RAMDISK)/first_stage_ramdisk/fstab.amlogic \
-      $(LOCAL_PATH)/init-files/fstab.amlogic:$(TARGET_COPY_OUT_RAMDISK)/fstab.amlogic
-  endif
-else
-  ifneq ($(strip $(TARGET_BOOTDEVICE)),)
-  PRODUCT_COPY_FILES += \
-      $(LOCAL_PATH)/init-files/fstab_no_avb.$(TARGET_BOOTDEVICE).amlogic:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.amlogic \
-      $(LOCAL_PATH)/init-files/fstab_no_avb.$(TARGET_BOOTDEVICE).amlogic:$(TARGET_COPY_OUT_RAMDISK)/first_stage_ramdisk/fstab.amlogic \
-      $(LOCAL_PATH)/init-files/fstab_no_avb.$(TARGET_BOOTDEVICE).amlogic:$(TARGET_COPY_OUT_RAMDISK)/fstab.amlogic
-  else
-  PRODUCT_COPY_FILES += \
-      $(LOCAL_PATH)/init-files/fstab_no_avb.amlogic:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.amlogic \
-      $(LOCAL_PATH)/init-files/fstab_no_avb.amlogic:$(TARGET_COPY_OUT_RAMDISK)/first_stage_ramdisk/fstab.amlogic \
-      $(LOCAL_PATH)/init-files/fstab_no_avb.amlogic:$(TARGET_COPY_OUT_RAMDISK)/fstab.amlogic
-  endif
-endif
+PRODUCT_PACKAGES += \
+    fstab.amlogic \
+    fstab.amlogic.first_stage_ramdisk \
+    fstab.amlogic.ramdisk \
+    init.amlogic.rc \
+    init.amlogic.board.rc \
+    init.amlogic.media.rc \
+    init.amlogic.system.rc \
+    init.amlogic.usb.rc \
+    init.amlogic.wifi.rc \
+    init.recovery.amlogic.rc
 
 ## Media firmware
 PRODUCT_COPY_FILES += \
@@ -127,7 +107,7 @@ PRODUCT_PACKAGES += \
     android.hardware.power-service.lineage-libperfmgr
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/powerhint.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint.json
+    $(LOCAL_PATH)/configs/power/powerhint.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint.json
 
 ## Shipping API
 PRODUCT_SHIPPING_API_LEVEL := 29
@@ -143,6 +123,17 @@ PRODUCT_SOONG_NAMESPACES += \
 ## USB
 PRODUCT_PACKAGES += \
     android.hardware.usb@1.0-service
+
+## VINTF
+DEVICE_MANIFEST_FILE := $(LOCAL_PATH)/manifest.xml
+
+ifneq ($(BOARD_HAVE_BLUETOOTH),false)
+DEVICE_MANIFEST_FILE += $(LOCAL_PATH)/manifest_bt.xml
+endif
+
+ifeq ($(PRODUCT_IS_ATV),true)
+DEVICE_MANIFEST_FILE += $(LOCAL_PATH)/manifest_tv.xml
+endif
 
 ## Inherit from the main common tree product makefile
 $(call inherit-product, device/amlogic/common/amlogic.mk)

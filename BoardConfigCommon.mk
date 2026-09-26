@@ -12,13 +12,6 @@ TARGET_CPU_VARIANT_RUNTIME := cortex-a53
 # Needed for systemcontrol blobs copy-files to recovery via TARGET_RECOVERY_DEVICE_DIRS
 BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
 
-## HIDL
-DEVICE_MANIFEST_FILE += $(COMMON_PATH)/manifest.xml
-
-ifneq ($(BOARD_HAVE_BLUETOOTH),false)
-DEVICE_MANIFEST_FILE += $(COMMON_PATH)/manifest_bt.xml
-endif
-
 ## Kernel
 BOARD_KERNEL_CMDLINE := androidboot.dynamic_partitions=true use_uvm=1
 ifeq ($(TARGET_BOOTDEVICE),usb)
@@ -33,6 +26,7 @@ TARGET_KERNEL_SOURCE := kernel/amlogic/linux-4.9
 
 ifeq ($(WITH_CONSOLE),true)
   BOARD_KERNEL_CMDLINE += console=ttyS0,115200 no_console_suspend ignore_loglevel
+  BOARD_KERNEL_CMDLINE += earlycon=aml-uart,0xff803000
 endif
 
 ## Kernel modules
@@ -66,9 +60,9 @@ TARGET_VENDOR_PROP += $(COMMON_PATH)/vendor.prop
 ## Recovery
 TARGET_RECOVERY_DEVICE_DIRS += vendor/amlogic/g12-common/proprietary
 ifneq ($(strip $(TARGET_BOOTDEVICE)),)
-  TARGET_RECOVERY_FSTAB := $(COMMON_PATH)/init-files/fstab.$(TARGET_BOOTDEVICE).amlogic
+  TARGET_RECOVERY_FSTAB := $(COMMON_PATH)/init/fstab.$(TARGET_BOOTDEVICE).amlogic
 else
-  TARGET_RECOVERY_FSTAB := $(COMMON_PATH)/init-files/fstab.amlogic
+  TARGET_RECOVERY_FSTAB := $(COMMON_PATH)/init/fstab.amlogic
 endif
 
 ## Releasetools
